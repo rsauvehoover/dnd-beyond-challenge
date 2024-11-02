@@ -1,0 +1,36 @@
+{
+  "name": "back-end-developer-challenge",
+  "version": "1.0.0",
+  "description": "TODO: Fix this description ### Overview This task focuses on creating an API for managing a player character's Hit Points (HP) within our game. The API will enable clients to perform various operations related to HP, including dealing damage of different types, considering character resistances and immunities, healing, and adding temporary Hit Points. The task requires building a service that interacts with HP data provided in the `briv.json` file and persists throughout the application's lifetime.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node build/index.js",
+    "build": "npm run swagger && tsc",
+    "dev": "npm run swagger && concurrently \"nodemon\" \"nodemon -x tsoa spec\"",
+    "swagger": "tsoa spec"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts",
+    "exec": "ts-node src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.8.6",
+    "@types/swagger-ui-express": "^4.1.7",
+    "concurrently": "^9.0.1",
+    "express": "^4.21.1",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "swagger-ui-express": "^5.0.1",
+    "tsoa": "^6.5.1"
+  }
+}
