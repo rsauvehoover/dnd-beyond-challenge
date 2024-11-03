@@ -5,5 +5,4 @@ const router = express.Router();
 
 router.use("/characters", CharacterRouter);
 
-
 export default router;

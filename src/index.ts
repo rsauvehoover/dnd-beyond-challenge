@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import swaggerUi from "swagger-ui-express";
+import DBManager from "./db/db";
 
 import Router from "./routes";
 
@@ -22,7 +23,12 @@ app.use(
 
 app.use(Router);
 
-app.listen(PORT, () => {
-  console.log("Server is running on port", PORT);
-});
+const dbm = new DBManager();
+
+dbm.start().then(async () => {
+  await dbm.initCharacterCollection();
+  app.listen(PORT, () => {
+    console.log("Server is running on port", PORT);
+  });
+})
 
