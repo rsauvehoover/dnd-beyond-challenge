@@ -42,6 +42,7 @@ export interface Character {
   name: string,
   level: number,
   hitPoints: number,
+  temporaryHitPoints: number,
   classes: CharacterClass[],
   stats: CharacterStats,
   items: Item[],
@@ -73,26 +74,6 @@ export interface Item {
   modifier: ItemModifier,
 }
 
-export enum DefenseType {
-  resistance = "resistance",
-  immmunity = "immunity"
-}
-
-export enum DamageType {
-  bludgeoning = "bludgeoning",
-  piercing = "piercing",
-  slashing = "slashing",
-  fire = "fire",
-  cold = "cold",
-  acid = "acid",
-  thunder = "thunder",
-  lightning = "lightning",
-  poison = "poison",
-  radiant = "radiant",
-  necrotic = "necrotic",
-  psychic = "psychic",
-  force = "force",
-}
 
 export interface Defense {
   type: string,
