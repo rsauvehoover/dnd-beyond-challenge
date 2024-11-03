@@ -6,10 +6,7 @@ import { Character } from "../models/character";
 // are properly formed and follow the standard model provided.
 export async function loadCharacterFromFile(path: string): Promise<Character | null> {
   try {
-
     const data = await readFile(path, "utf8");
-    console.log(data);
-
     return JSON.parse(data);
   }
   catch {
