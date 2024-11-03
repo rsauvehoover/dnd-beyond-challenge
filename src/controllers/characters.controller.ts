@@ -1,5 +1,6 @@
 import { Get, Post, Route, Tags, Path } from "tsoa";
 
+import { loadCharacterFromFile } from "../db/utils";
 import { type Character } from "../models/character";
 
 @Route("characters")
@@ -11,7 +12,7 @@ export default class CharacterController {
   }
   @Get("/:name")
   public async getCharacter(@Path() name: string): Promise<Character | null> {
-    return {} as Character
+    return loadCharacterFromFile(`./data/${name}.json`);
   }
   @Post("/:name/heal")
   public async healCharacter(@Path() name: string): Promise<string> {

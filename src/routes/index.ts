@@ -1,12 +1,9 @@
 import express from "express";
-import CharacterController from "../controllers/characters.controller";
+import CharacterRouter from "./character.router"
 
 const router = express.Router();
 
-router.get("/characters", async (_req, res) => {
-  const controller = new CharacterController();
-  const response = await controller.getCharacters();
-  return res.send(response);
-});
-export default router;
+router.use("/characters", CharacterRouter);
 
+
+export default router;
