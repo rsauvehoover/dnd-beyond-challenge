@@ -1,14 +1,6 @@
 import { CharacterModel, Character } from "../models/character";
 import { DamageInstance, DefenseType } from "../models/damage";
 
-const EXCLUDED_FIELDS = {
-  "_id": 0,
-  "__v": 0,
-  "classes._id": 0,
-  "items._id": 0,
-  "defenses._id": 0,
-}
-
 export interface IHealPayload {
   name: string,
   value: number
