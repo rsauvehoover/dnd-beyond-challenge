@@ -4,6 +4,8 @@ const characterSchema = new Schema<Character>({
   name: String,
   level: Number,
   hitPoints: Number,
+  maxHitPoints: Number,
+  temporaryHitPoints: { type: Number, default: 0 },
   classes: [
     {
       name: String,
@@ -34,7 +36,33 @@ const characterSchema = new Schema<Character>({
       defense: String
     }
   ]
+}, {
+  toJSON: {
+    // Remove all the internal properties before rendering json since users don't
+    // need to know, kind of a gross way to do it but it works for now.
+    transform: function (doc, ret) {
+      delete ret.__v;
+      delete ret._id;
+      ret.classes.forEach((c: any) => {
+        delete c._id
+      })
+      ret.items.forEach((c: any) => {
+        delete c._id
+      })
+      ret.defenses.forEach((c: any) => {
+        delete c._id
+      })
+    }
+  }
 });
+
+// Add max hp to the document before being added to DB assumption is that the hp
+// set in the original json character description is the pcs max hp
+characterSchema.pre('save', function () {
+  if (!this.maxHitPoints) {
+    this.maxHitPoints = this.hitPoints;
+  }
+})
 
 export const CharacterModel = model("Character", characterSchema);
 
@@ -42,7 +70,8 @@ export interface Character {
   name: string,
   level: number,
   hitPoints: number,
-  temporaryHitPoints: number,
+  maxHitPoints?: number,
+  temporaryHitPoints?: number,
   classes: CharacterClass[],
   stats: CharacterStats,
   items: Item[],
