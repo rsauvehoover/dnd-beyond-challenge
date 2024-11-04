@@ -56,10 +56,12 @@ export async function damage(payload: IDamagePayload): Promise<Character | null>
       continue;
     }
     else if (resistances.includes(instance.type)) {
-      damageTaken += Math.floor(instance.roll / 2);
+      // Round down in all cases unless there's a specific rule around it, and we want to
+      // ensure damage rolls are positive
+      damageTaken += Math.floor(Math.max(0, instance.roll) / 2);
     }
     else {
-      damageTaken += instance.roll;
+      damageTaken += Math.max(0, instance.roll);
     }
   }
 
