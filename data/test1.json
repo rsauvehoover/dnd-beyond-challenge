@@ -1,0 +1,15 @@
+{
+  "name": "test1",
+  "level": 1,
+  "hitPoints": 10,
+  "defenses": [
+    {
+      "type": "fire",
+      "defense": "immunity"
+    },
+    {
+      "type": "slashing",
+      "defense": "resistance"
+    }
+  ]
+}

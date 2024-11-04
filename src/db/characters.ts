@@ -52,6 +52,7 @@ export async function damage(payload: IDamagePayload): Promise<Character | null>
 
   let damageTaken = 0;
   for (const instance of payload.damageInstances) {
+    // Check immunity first in case the character has both resistance and immunity for some reason
     if (immunities.includes(instance.type)) {
       continue;
     }
