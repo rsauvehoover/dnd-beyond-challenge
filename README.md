@@ -4,82 +4,143 @@
 
 This is my implementation of the hp management API for the DnD beyond backend developer challenge.
 
+### Assumptions
+
+- "Persist throughout the application's lifetime" means that persistence should only last so long as the service is running and reset when closed (i.e. persisent database not required) and since character info is initialized at startup, it should start with all the character data from provided in `data/`
+- The provided hp in the character json is the maximum hp of the character, and the api does not need to calculate it on load as ordinarily max hp would depend on a number of unknown variables.
+
 ### Usage
 
-#Install
+- Character files can be added to the `data/` folder and will populate the database on startup.
+- By default the api will run on `localhost:3000`, but the port can be set with the `PORT` environment variable
+- For manual api use/testing the swagger page can be used at `localhost:3000/api-docs/`
+
+#### Install
 
 ```bash
 npm install
 ```
 
-### Overview
+#### Local Development
 
-This task focuses on creating an API for managing a player character's Hit Points (HP) within our game. The API will enable clients to perform various operations related to HP, including dealing damage of different types, considering character resistances and immunities, healing, and adding temporary Hit Points. The task requires building a service that interacts with HP data provided in the `briv.json` file and persists throughout the application's lifetime.
+Since the local database is an in-memory instance of mongodb, local development instance can simply be started with the following
 
-### Task Requirements
+```bash
+npm run dev
+```
 
-#### API Operations
+#### Build and serve
 
-1. **Deal Damage**
+```bash
+npm run build
+```
 
-   - Implement the ability for clients to deal damage of different types (e.g., bludgeoning, fire) to a player character.
-   - Ensure that the API calculates damage while considering character resistances and immunities.
+```bash
+npm run start
+```
 
-   > Suppose a player character is hit by an attack that deals Piercing damage, and the attacker rolls a 14 on the damage's Hit Die (with a Piercing damage type). `[Character Hit Points - damage: 25 - 14 = 11]`
+## Api Endpoints
 
-2. **Heal**
+#### `GET /characters`
 
-   - Enable clients to heal a player character, increasing their HP.
+Returns a list of characters
 
-3. **Add Temporary Hit Points**
+##### response
 
-   - Implement the functionality to add temporary Hit Points to a player character.
-   - Ensure that temporary Hit Points follow the rules: they are not additive, always taking the higher value, and cannot be healed.
+```json
+[
+   {
+      "name": "briv",
+      "stats": [...],
+      ...
+   },
+   ...
+]
+```
 
-   > Imagine a player character named "Eldric" currently has 11 Hit Points (HP) and no temporary Hit Points. He finds a magical item that grants him an additional 10 HP during the next fight. When the attacker rolls a 19, Eldric will lose all 10 temporary Hit Points and 9 from his player HP.
+#### `GET /characters/{name}`
 
-#### Implementation Details
+Return a specified character or not found if character doesn't exist
 
-- Build the API using either C# or NodeJS.
-- Ensure that character information, including HP, is initialized during the start of the application. Developers do not need to calculate HP; it is provided in the `briv.json` file.
-- Retrieve character information, including HP, from the `briv.json` file.
+##### response
 
-#### Data Storage
+```json
+{
+   "name": "briv",
+   "stats": [...],
+   ...
+}
+```
 
-- You have the flexibility to choose the data storage method for character information.
+#### `POST /characters/heal`
 
-### Instructions to Run Locally
+Post body takes character name and a heal value and returns the updated character object
 
-1. Clone the repository or obtain the project files.
-2. Install any required dependencies using your preferred package manager.
-3. Configure the API with necessary settings (e.g., database connection if applicable).
-4. Build and run the API service locally.
-5. Utilize the provided `briv.json` file as a sample character data, including HP, for testing the API.
+##### body
 
-### Additional Notes
+```json
+{
+  "name": "briv",
+  "value": 5
+}
+```
 
-- Temporary Hit Points take precedence over the regular HP pool and cannot be healed.
-- Characters with resistance take half damage, while characters with immunity take no damage from a damage type.
-- Use character filename as identifier
+##### response
 
-#### Possible Damage Types in D&D
+```json
+{
+   "name": "briv",
+   "hitPoints": 20,
+   ...
+}
+```
 
-Here is a list of possible damage types that can occur in Dungeons & Dragons (D&D). These damage types should be considered when dealing damage or implementing character resistances and immunities:
+#### `POST /characters/dealDamage`
 
-- Bludgeoning
-- Piercing
-- Slashing
-- Fire
-- Cold
-- Acid
-- Thunder
-- Lightning
-- Poison
-- Radiant
-- Necrotic
-- Psychic
-- Force
+Post body takes character name and a list of damage instances to be applied sequentially and returns the updated character object
 
-If you have any questions or require clarification, please reach out to your Wizards of the Coast contact, and we will provide prompt assistance.
+##### body
 
-Good luck with the implementation!
+```json
+{
+  "name": "briv",
+  "damageInstances": [
+    {
+      "type": "bludgeoning",
+      "roll": 5
+    }
+  ]
+```
+
+##### response
+
+```json
+{
+   "name": "briv",
+   "hitPoints": 20,
+   ...
+}
+```
+
+#### `POST /characters/addTemporaryHp`
+
+Post body takes character name and a temporary hp value and returns the updated character object
+
+##### body
+
+```json
+{
+  "name": "briv",
+  "value": 5
+}
+```
+
+##### response
+
+```json
+{
+   "name": "briv",
+   "temporaryHitPoints": 5,
+   ...
+}
+```
