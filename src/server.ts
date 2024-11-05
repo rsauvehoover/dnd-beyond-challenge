@@ -37,7 +37,9 @@ export default class API {
     await this.dbm.start();
     await this.dbm.initCharacterCollection();
 
-    this.httpServer = this.app.listen(PORT);
+    this.httpServer = this.app.listen(PORT, () => {
+      console.log("Server is running on port", PORT);
+    });
   }
 
   public async stop() {
