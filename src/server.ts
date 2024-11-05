@@ -1,38 +1,47 @@
-import express, { Application } from "express";
+import express, { type Application } from "express";
 import swaggerUi from "swagger-ui-express";
 import DBManager from "./db/db";
 
 import Router from "./routes";
+import { Server } from "http";
 
 const PORT = process.env.PORT || 3000;
 
-export default async function server() {
+export default class API {
+  httpServer: Server | null;
+  app: Application;
+  dbm: DBManager;
 
-  const app: Application = express();
+  constructor() {
+    this.httpServer = null;
+    this.app = express();
+    this.dbm = new DBManager();
+  }
 
-  app.use(express.json());
-  app.use(express.static("public"));
+  public async start() {
+    this.app.use(express.json());
+    this.app.use(express.static("public"));
 
-  app.use(
-    "/api-docs",
-    swaggerUi.serve,
-    swaggerUi.setup(undefined, {
-      swaggerOptions: {
-        url: "/swagger.json",
-      },
-    })
-  );
+    this.app.use(
+      "/api-docs",
+      swaggerUi.serve,
+      swaggerUi.setup(undefined, {
+        swaggerOptions: {
+          url: "/swagger.json"
+        }
+      })
+    );
 
-  app.use(Router);
+    this.app.use(Router);
 
-  const dbm = new DBManager();
+    await this.dbm.start();
+    await this.dbm.initCharacterCollection();
 
-  await dbm.start();
-  await dbm.initCharacterCollection();
+    this.httpServer = this.app.listen(PORT);
+  }
 
-  app.listen(PORT, () => {
-    console.log("Server is running on port", PORT);
-  });
-
-  return app;
+  public async stop() {
+    await this.dbm.stop();
+    if (this.httpServer) this.httpServer.close();
+  }
 }

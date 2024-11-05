@@ -1,3 +1,5 @@
-import server from "./server";
+import API from "./server";
 
-server();
+const app = new API();
+
+app.start();

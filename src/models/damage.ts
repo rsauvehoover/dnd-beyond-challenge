@@ -16,7 +16,7 @@ export enum DamageType {
   radiant = "radiant",
   necrotic = "necrotic",
   psychic = "psychic",
-  force = "force",
+  force = "force"
 }
 
 export interface DamageInstance {

@@ -1,5 +1,5 @@
 import express from "express";
-import CharacterRouter from "./character.router"
+import CharacterRouter from "./character.router";
 
 const router = express.Router();
 

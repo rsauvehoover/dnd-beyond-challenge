@@ -1,6 +1,15 @@
 import { Get, Post, Route, Tags, Path, Body } from "tsoa";
 
-import { getAll, getCharacter, heal, damage, addTemporaryHp, type IDamagePayload, type IHealPayload, type ITempHpPayload } from "../db/characters";
+import {
+  getAll,
+  getCharacter,
+  heal,
+  damage,
+  addTemporaryHp,
+  type IDamagePayload,
+  type IHealPayload,
+  type ITempHpPayload
+} from "../db/characters";
 import { type Character } from "../models/character";
 
 @Route("characters")
@@ -25,7 +34,7 @@ export default class CharacterController {
   public async dealDamage(@Body() payload: IDamagePayload): Promise<Character | null> {
     const char = await damage(payload);
     if (!char) return null;
-    return char
+    return char;
   }
   @Post("/addTemporaryHp")
   public async addTemporaryHp(@Body() payload: ITempHpPayload): Promise<Character | null> {
