@@ -2,7 +2,7 @@
 
 ### Overview
 
-This is my implementation of the hp management API for the DnD beyond backend developer challenge.
+This is my implementation of the hp management API for the DnD beyond backend developer challenge. It uses an in memory mongodb database [(mongodb-memory-server)](https://github.com/typegoose/mongodb-memory-server) to simulate having a database without having to spin up a local db to test/develop the API.
 
 ### Assumptions
 
@@ -37,6 +37,12 @@ npm run build
 
 ```bash
 npm run start
+```
+
+#### Test
+
+```bash
+npm run test
 ```
 
 ## Api Endpoints
